@@ -73,7 +73,7 @@ private:
 };
 
 // -------------------- progress_bar --------------------
-inline void clamp(double& x, double a, double b)
+inline static void clamp(double& x, double a, double b)
 {
     if (x < a) x = a;
     if (x > b) x = b;
@@ -569,6 +569,6 @@ private:
     progress_bar bar_;
 };
 
-inline auto tqdm(timer t) { return tqdm_timer(t.num_seconds()); }
+inline static auto tqdm(timer t) { return tqdm_timer(t.num_seconds()); }
 
 } // namespace tq
