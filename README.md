@@ -1,3 +1,31 @@
+# Update
+
+In order to make this library compatible with OpenMP loops, the iterator part was removed and a manually updated progress bar was used instead. In order to ensure thread safety, `#pragma omp critical` is used to wrap the progress bar update section.
+```cpp
+#include "tqdm.hpp"
+
+#include <chrono>
+#include <omp.h>
+#include <thread>
+
+int main()
+{
+    using namespace std::chrono_literals;
+    std::size_t N = 1000;
+    Tqdm::ProgressBar bar(N);
+
+#pragma omp parallel for default(none) schedule(dynamic) shared(bar, N) num_threads(4)
+    for (std::size_t i = 0; i < N; i++)
+    {
+        std::this_thread::sleep_for(10ms);
+#pragma omp critical
+        bar.update();
+    }
+
+    return 0;
+}
+```
+
 # Easy progress bars!
 
 Create CLI progress bars easily!
